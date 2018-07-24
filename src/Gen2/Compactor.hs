@@ -251,7 +251,9 @@ packStrings settings dflags cstate code =
       rewriteBlock (stat, ci, si)
         = (rewriteStat stat, ci, mapMaybe rewriteStatic si)
 
-    in (cstate0, initStatic : map rewriteBlock code)
+    in (cstate0,
+        (if gsNoStringCompact settings then code
+         else (initStatic : map rewriteBlock code)))
 
 renameInternals :: HasDebugCallStack
                 => GhcjsSettings
@@ -802,9 +804,7 @@ compact settings dflags cs0 rtsDeps0 input0
   let rtsDeps1 = rtsDeps0 ++
                  map (<> "_e") rtsDeps0 ++
                  map (<> "_con_e") rtsDeps0
-      (cs1, input1) = if (gsNoStringCompact settings)
-                      then (cs0, input0)
-                      else packStrings settings dflags cs0 input0
+      (cs1, input1) = packStrings settings dflags cs0 input0
   in  renameInternals settings dflags cs1 rtsDeps1 input1
 
   -- renameInternals settings dflags cs1 rtsDeps' input
