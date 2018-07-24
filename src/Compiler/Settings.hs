@@ -77,6 +77,7 @@ data GhcjsSettings =
                 , gsJsLibOutputDir     :: Maybe FilePath
                 , gsJsLibSrcs          :: [FilePath]
                 , gsDedupe             :: Bool
+                , gsNoStringCompact    :: Bool
                 }
 
 usingBase :: GhcjsSettings -> Bool
@@ -97,11 +98,11 @@ generateAllJs s
   settings, but it doesn't work very well. find something better.
  -}
 instance Monoid GhcjsSettings where
-  mempty = GhcjsSettings False False False False Nothing Nothing Nothing False False False Nothing NoBase Nothing Nothing [] False
+  mempty = GhcjsSettings False False False False Nothing Nothing Nothing False False False Nothing NoBase Nothing Nothing [] False False
 
 instance Semigroup GhcjsSettings where
-  (<>) (GhcjsSettings ne1 nn1 bc1 nj1 sp1 lc1 gh1 oo1 nr1 ns1 gb1 ub1 ljsl1 jslo1 jslsrc1 dd1)
-       (GhcjsSettings ne2 nn2 bc2 nj2 sp2 lc2 gh2 oo2 nr2 ns2 gb2 ub2 ljsl2 jslo2 jslsrc2 dd2) =
+  (<>) (GhcjsSettings ne1 nn1 bc1 nj1 sp1 lc1 gh1 oo1 nr1 ns1 gb1 ub1 ljsl1 jslo1 jslsrc1 dd1 nsc1)
+       (GhcjsSettings ne2 nn2 bc2 nj2 sp2 lc2 gh2 oo2 nr2 ns2 gb2 ub2 ljsl2 jslo2 jslsrc2 dd2 nsc2) =
           GhcjsSettings (ne1 || ne2)
                         (nn1 || nn2)
                         (bc1 || bc2)
@@ -118,6 +119,7 @@ instance Semigroup GhcjsSettings where
                         (jslo1 <> jslo2)
                         (jslsrc1 <> jslsrc2)
                         (dd1 || dd2)
+                        (nsc1 || nsc2)
 
 data THRunner =
   THRunner { thrProcess        :: ProcessHandle

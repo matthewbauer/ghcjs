@@ -440,7 +440,7 @@ thSettings :: GhcjsSettings
 thSettings = GhcjsSettings False True False False Nothing
                            Nothing Nothing True True True
                            Nothing NoBase
-                           Nothing Nothing [] False
+                           Nothing Nothing [] False False
 
 startTHRunner :: DynFlags
               -> GhcjsEnv
