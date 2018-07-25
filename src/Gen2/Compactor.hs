@@ -571,6 +571,10 @@ encodeStatic0 cs (StaticInfo _to sv _)
       [6] -- ++ encodeDouble d
 --    | StaticString t <- sv         = [7, T.length t] ++ map encodeChar (T.unpack t)
 --    | StaticBin bs <- sv           = [8, BS.length bs] ++ map fromIntegral (BS.unpack bs)
+    | StaticUnboxed (StaticUnboxedString d) <- bs =
+      [7, BS.length bs] ++ map fromIntegral (BS.unpack bs)
+    | StaticUnboxed (StaticUnboxedStringOffset d) <- bs =
+      [7, BS.length bs] ++ map fromIntegral (BS.unpack bs)
     | StaticList [] Nothing <- sv =
       [8]
     | StaticList args t <- sv =
